@@ -14,6 +14,15 @@ public class EchgleneWoy_03 {
 		
 	} // End main
 	
+	//********************************************************
+	
+	/**
+	 * processInput - Open and read the input file 
+	 * and depending on the data; will either call
+	 * processStudentData() or processGradeItemData()
+	 * @throws FileNotFoundException
+	 * @return none
+	 */
 	
 	public void processInput() throws FileNotFoundException {
 		
@@ -29,10 +38,16 @@ public class EchgleneWoy_03 {
 				String line = scnr.nextLine();
 				splitString = line.split(",");
 				
-				
-				
-			} // End while
+				if(splitString[0].contains("STUDENT")) {
+					processStudentData(splitString);
+
+				} // End if
+				else if(splitString[0].contains("GRADEITEM") ) {
+					processGradeItemData(splitString);
+					
+				}// End if
 			
+			} // End while
 			
 		} // End try
 		catch(FileNotFoundException e) {
@@ -41,5 +56,20 @@ public class EchgleneWoy_03 {
 		} // End catch
 		
 	} // End processInput
+	
+	//********************************************************
+	
+	/**
+	 * processStudentData - create a Student object, and 
+	 * output to a file
+	 * @param splitString - Array of type String with Student data
+	 * @return none
+	 */
+	
+	public static void processStudentData(String[] splitString) throws 
+	IllegalArgumentException {
+		
+	} // End processStudentData
+	
 
 } // End class
