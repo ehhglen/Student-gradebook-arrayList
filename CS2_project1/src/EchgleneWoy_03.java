@@ -107,7 +107,12 @@ public class EchgleneWoy_03 implements MyCollectionInterface {
 		
 		if(splitString[1].equals("ADD")) {
 			
+			try {
 			 student = new Student(splitString[2], splitString[3], splitString[4], splitString[5]);
+			} // End try
+			catch(IllegalArgumentException e) {
+				
+			} // End catch
 			
 			if(listOfStudents.contains(student)) {
 				System.out.println("List already contains the Student data with student ID " + splitString[2]);
@@ -205,4 +210,4 @@ public class EchgleneWoy_03 implements MyCollectionInterface {
 	} // End class
 	
 
- // End class
+ 
