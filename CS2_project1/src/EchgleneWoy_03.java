@@ -10,29 +10,34 @@
  * 	
  */
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
-public class EchgleneWoy_03 {
+public class EchgleneWoy_03 implements MyCollectionInterface {
 	
 	// Declare variables
 	
-	private static List listOfStudents;
-	private static List	listOfGradeItem;
-	private final static String INPUT_FILE = "Project_03_Input01.txt";
+	private static Student[] arrayOfStudents;
+	private static List<Student> listOfStudents;
+	private static List<GradeItem> listOfGradeItem;
+	private final static String INPUT_FILE = "/CS2_project1/src/Project_03_Input01.txt";
 	private final static String OUTPUT_FILE = "Project_03_Output01.txt";
 			
 
 
-	public static void main(String[] args) throws FileNotFoundException {
+	public static void main(String[] args) throws IOException {
 		
-		listOfStudents = new List();
-		listOfGradeItem = new List();
+		listOfStudents = new ArrayList<Student>();
+	    listOfGradeItem = new ArrayList<GradeItem>();
 		
 		processInput();
 		System.out.println("we got this far.");
 		//generateReport();
-		
 		
 		
 	} // End main
@@ -47,20 +52,22 @@ public class EchgleneWoy_03 {
 	 * @return none
 	 */
 	
-	public static void processInput() throws FileNotFoundException {
+	public static void processInput() throws IOException {
 		
-		//Out statement letter user know the input file is being read
-		Scanner scnr = new Scanner(INPUT_FILE);
-		System.out.println("Reading data from " + INPUT_FILE + "...");
-		
-		//Stores split line into a String array
+		//Out statement let user know the input file is being read	
+		Scanner scnr;
 		String[] splitString;
+		
+		File file = new File("C:\\Users\\Echglene\\git\\repository2\\test2wtf\\CS2_project1\\src\\Project_03_Input01.txt");
+		scnr = new Scanner(file);
+		
+		System.out.println("Reading data from " + file + "...");
 		
 		while(scnr.hasNextLine()) {
 			String line = scnr.nextLine();
 			splitString = line.split(",");
-			
-			if(splitString[0].equals("STUDENT")) {
+
+			if(splitString[0].contains("STUDENT")) {
 				
 				// Call processStudentData
 				processStudentData(splitString);
@@ -68,15 +75,15 @@ public class EchgleneWoy_03 {
 
 			} // End if
 			
-			else if(splitString[0].equals("GRADEITEM") ) {
+			else if(splitString[0].contains("GRADEITEM") ) {
 				
 				//Call processGradeItemData
 				processGradeItemData(splitString);
 				System.out.println("'GRADEITEM' has been found in the file.");
 				
 			} // End if
-		
 		} // End while
+
 		scnr.close();
 			
 			
@@ -94,13 +101,16 @@ public class EchgleneWoy_03 {
 	
 	public static void processStudentData(String[] splitString) throws 
 										IllegalArgumentException {
+		//List<Student> listOfStudents = new ArrayList<Student>();
 		
-		Student student = new Student(splitString[2], splitString[3], splitString[4], splitString[5]);
+		Student student;
 		
 		if(splitString[1].equals("ADD")) {
 			
+			 student = new Student(splitString[2], splitString[3], splitString[4], splitString[5]);
+			
 			if(listOfStudents.contains(student)) {
-				System.out.println("List already contains the Student data.");
+				System.out.println("List already contains the Student data with student ID " + splitString[2]);
 			} // End if
 			else { 
 				// Add method to add student to list
@@ -110,13 +120,15 @@ public class EchgleneWoy_03 {
 				
 		} // End if
 		
-		if(splitString[1].equals("DEL")) {
+		else if(splitString[1].equals("DEL")) {
 			
-			student =  new Student(splitString[2], splitString[3], splitString[4], splitString[5]);
+			 student =  new Student(splitString[2], splitString[3], splitString[4], splitString[5]);
 			// Remove method to remove Student from list
 			listOfStudents.remove(student);
+			System.err.println("Student was removed in the list with Student ID " + splitString[2]);
 		} // End if
-		else if(!splitString[1].equals("ADD") || !splitString[1].equals("DEL")) {
+		else if(!(splitString[1].equals("ADD")) && 
+				!(splitString[1].equals("DEL"))) {
 			throw new IllegalArgumentException("Line does not contain 'ADD' or 'DEL' " + splitString[1]);
 			
 		} // End else if
@@ -142,10 +154,11 @@ public class EchgleneWoy_03 {
 						Integer.parseInt(splitString[7]),
 						Integer.parseInt(splitString[8]));
 		
-		if(splitString[1].equals("ADD")) {
+		if(splitString[1].contains("ADD")) {
 			
 			if(listOfGradeItem.contains(gradeItem)) {
-				System.out.println("Grade Item list already contains grade Item data.");
+				System.err.println("Grade Item list already contains grade Item data with Student ID: " 
+									+ splitString[3] + "and Grade Item ID: " + splitString[2]);
 				
 			} else {
 				listOfGradeItem.add(gradeItem); // Add new grade Item object to list
@@ -154,17 +167,43 @@ public class EchgleneWoy_03 {
 			} // End else	
 			
 		} // End if
-		if(splitString[1].equals("DEL")) {
+		else if(splitString[1].contains("DEL")) {
 			// Create grade item object?
 			
 			listOfGradeItem.remove(gradeItem);	
+			System.err.println("Grade Item with Grade Item ID " + splitString[2] + 
+					" has been deleted.");
 		} // End if
-		else if(!splitString[1].equals("DEL") || !splitString[1].equals("ADD")) {
+		else if(!splitString[1].contains("DEL") && !splitString[1].contains("ADD")) {
 			throw new IllegalArgumentException("Line does not contain 'ADD' or 'DEL' " + splitString[1]);
 		} // End else if
 		
 		
 	} // End processGradeItemData
 	
+	public static void generateReport() throws FileNotFoundException {
+		
 
-} // End class
+		// Write to output file 
+		PrintWriter outFile = new PrintWriter(new File(OUTPUT_FILE));
+		
+	
+		
+		// Calls toArray method in Student and Gradeitem lists
+		//listOfStudents.toArray(arrayOfStudents); // Why do I need a new array object to store this? 
+		arrayOfStudents = (Student[]) listOfStudents.toArray();
+		for(Student x : arrayOfStudents) {
+			System.out.printf("%s", x);
+		}
+		
+		// Prints to console stating that report is generating
+		System.out.println("Generating report ... ");
+		
+			
+		} // End generateReport
+		
+		
+	} // End class
+	
+
+ // End class
