@@ -187,7 +187,6 @@ public class EchgleneWoy_03 implements MyCollectionInterface {
 		// Write to output file 
 		PrintWriter outFile = new PrintWriter(new File(OUTPUT_FILE));
 		
-	
 		
 		// Calls toArray method in Student and Gradeitem lists
 		//listOfStudents.toArray(arrayOfStudents); // Why do I need a new array object to store this? 
